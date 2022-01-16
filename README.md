@@ -1,5 +1,5 @@
 Made by:
-Khalid 
-Justin
-Rachel
-Saki
+Khalid,
+Justin,
+Rachel,
+Saki,
