@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <link rel="stylesheet" href="mystyle.css">
+        <title>FindMyBook</title>
+        <script type="text/javascript">
+        function fn1(){
+            var str = document.getElementById("text1").value;
+            alert("Value in TextBox: " + str);
+        }
+        </script>
+    </head>
+
+    <body>
+        <div class = 'SearchTitle'>
+            <img src="Title.png" alt="TitleText">
+        </div>
+        <div class = 'Search'>
+            <input id='text1', placeholder="Call No.">
+            <a href="index.html">
+                <button onclick="fn1()" , id='btn1'>Search</button>
+            </a> 
+        </div>
+    </body>
+
+</html>

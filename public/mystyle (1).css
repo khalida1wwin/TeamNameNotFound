@@ -1,0 +1,38 @@
+html, body {
+    height: 100%;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    display: table-cell;
+}
+
+.SearchTitle {
+    margin-top: 50px;
+}
+  
+.SearchOuter {
+    width: 100%;
+    text-align: center;
+  }
+  
+.SearchInner {
+    display: inline-block;
+}
+
+.SearchInner input {
+    font-size: 35px;
+    height:40px;
+}
+
+.SearchInner button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    height: 40px;
+}

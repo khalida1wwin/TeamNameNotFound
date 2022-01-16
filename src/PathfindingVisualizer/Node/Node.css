@@ -6,7 +6,7 @@
 }
 
 .node-finish {
-  background-color: red;
+  background-color: rgba(219, 37, 37, 0);
 }
 
 .node-start {
@@ -27,7 +27,7 @@
 
 
 .node-wall {
-  background-color: rgba(135, 139, 142, 0);
+  background-color: rgba(135, 139, 142, 0.01);
 }
 
 .node-shortest-path {
