@@ -4,10 +4,10 @@ import {dijkstra, getNodesInShortestPathOrder} from '../algorithms/dijkstra';
 
 import './PathfindingVisualizer.css';
 
-const START_NODE_ROW = 5;
-const START_NODE_COL = 15;
-const FINISH_NODE_ROW = 10;
-const FINISH_NODE_COL = 35;
+const START_NODE_ROW = 30;
+const START_NODE_COL = 55;
+const FINISH_NODE_ROW = 1;
+const FINISH_NODE_COL = 2;
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -35,7 +35,7 @@ export default class PathfindingVisualizer extends Component {
   }
 
   handleMouseUp() {
-    //this.setState({mouseIsPressed: false});
+    this.setState({mouseIsPressed: false});
   }
 
   animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
@@ -114,13 +114,46 @@ export default class PathfindingVisualizer extends Component {
 
 const getInitialGrid = () => {
   const grid = [];
-  for (let row = 0; row < 50; row++) {
+  const Wallpoints = ['1,1', '2,2', '3,3'];
+  for (let row = 0; row < 40; row++) {
     const currentRow = [];
-    for (let col = 0; col < 50; col++) {
-      currentRow.push(createNode(col, row));
+    for (let col = 0; col < 60; col++) {
+      const Vector = [row,col];
+      String(Vector);
+      if (Wallpoints.includes(Vector)) {
+        
+        currentRow.push(createWall(col, row));
+        console.log('in if statment########################');
+
+      //}else if ((row === 1) && (col === 3)) {
+        
+      //  currentRow.push(createWall(col, row));
+      }else{
+        console.log('in if statment########################');
+        currentRow.push(createNode(col, row));
+      }
+
+      //currentRow.push(createNode(col, row));
+
     }
     grid.push(currentRow);
-  }
+  }/*
+  
+  for (let row = 0; row < 34; row++) {
+    for (let col = 0; col < 60; col++) {
+      if ((row === 1) && (col === 0)){
+        const newGrid = grid.slice();
+        const node = newGrid[row][col];
+        const newNode = {
+        ...node,
+        isWall: !node.isWall,
+      };
+      newGrid[row][col] = newNode;
+
+    }
+    grid.push(currentRow);
+  }*/
+  
   return grid;
 };
 
@@ -136,6 +169,18 @@ const createNode = (col, row) => {
     previousNode: null,
   };
 };
+const createWall = (col, row) => {
+  return {
+    col,
+    row,
+    isStart: row === START_NODE_ROW && col === START_NODE_COL,
+    isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
+    distance: Infinity,
+    isVisited: false,
+    isWall: true,
+    previousNode: null,
+  };
+}; 
 
 const getNewGridWithWallToggled = (grid, row, col) => {
   const newGrid = grid.slice();
@@ -147,3 +192,5 @@ const getNewGridWithWallToggled = (grid, row, col) => {
   newGrid[row][col] = newNode;
   return newGrid;
 };
+
+
