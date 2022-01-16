@@ -1,8 +1,12 @@
-from decimal import Clamped
+from cgitb import text
 import json
-from operator import countOf
 import random as rand
-from string import ascii_uppercase
+from tkinter import Image
+from PIL import Image
+from PIL import ImageFont
+from PIL import ImageDraw 
+import copy
+
 
 # alph-int-alph+int-year
 # Call Number = Subject - topic in subject - alph+int - year of publication 
@@ -11,18 +15,46 @@ from string import ascii_uppercase
     # Row 
         # Bookcase 
 
-def ToJson(CallNums, rows, FloorData):
+def ToJson(CallNums, rows, FloorData, FloorImage, width, height):
     CallNums = sum(CallNums, [])
-    print(CallNums)
+    #print(CallNums)
     count = 0
+    Xpad = (width-(len(rows)*225))//2
+    Xpad = Xpad - Xpad%25
+    
     for i in range(len(rows)):
+        XOffset, YOffset= i*225+Xpad, 0
+        RowID, BotRow, Space = '', '', False
         start = count
         row = {}
         for j in range(rows[i]):
             if ord(CallNums[count][4]) >= ord('A'):
-                row[CallNums[count][1:4]+'-'+ CallNums[count][4:]] = '('+str(i)+', '+str(j)+')'
+                text = CallNums[count][1:4]+'-'+ CallNums[count][4:]
+                row[text] = '('+str(i)+', '+str(j)+')'
             else:
-                row[CallNums[count][1:3]+'-'+ CallNums[count][3:]] = '('+str(i)+', '+str(j)+')'
+                text = CallNums[count][1:3]+'-'+ CallNums[count][3:]
+                row[text] = '('+str(i)+', '+str(j)+')'
+
+            if j == 0:
+                StartRow = CallNums[count][0] + ' - ' + CallNums[count + rows[i]-1][0]
+                RowID = copy.deepcopy(StartRow)
+            elif j == rows[i]-1:
+                BotRow = RowID
+            else:
+                StartRow = ''
+                BotRow = ''
+
+            if YOffset in range(300,700) and Space == False:
+                StartRow = CallNums[count][0] + ' - ' + CallNums[count + rows[i]-1][0]
+                YOffset += 200
+                Space = True
+
+            if j%2 == 0:
+                YOffset += 25
+                DarwFloor(XOffset, YOffset, FloorImage, StartRow, BotRow, text) #160 * 20
+            else:
+                YOffset += 50
+                DarwFloor(XOffset, YOffset, FloorImage, StartRow, BotRow, text)
             count += 1
         RowIndex = CallNums[start][0]+'-'+ CallNums[count-1][0]
         FloorData[RowIndex] = row
@@ -32,7 +64,7 @@ def ToJson(CallNums, rows, FloorData):
 
     return FloorData
 
-def floorGen(start, end, NumRows, BooksPerShelve, FloorData, Low, High):
+def floorGen(start, end, NumRows, FloorData, Low, High, FloorImage, width, height):
     Rows = []
     TopicNum = [] # [[topic, #of shelves the Topic has], ...]
     SubTopic = [] #[[subtopic num (sorted)], ...]
@@ -91,26 +123,45 @@ def floorGen(start, end, NumRows, BooksPerShelve, FloorData, Low, High):
     #print(SubTopic)
     #print(CallNumbers)
 
-    return ToJson(CallNumbers, Rows, FloorData)
+    return ToJson(CallNumbers, Rows, FloorData,FloorImage, width, height)
+
+def DarwFloor(x,y, floor, StartRow, BotRow, text):
+    shelve = Image.open("shelve.png")
+    shelve = shelve.convert("RGBA")
+    floor.paste(shelve, (x,y), shelve)
+
+    draw = ImageDraw.Draw(floor)
+    font = ImageFont.truetype(r'OpenSans-Bold.ttf', 16)
+    draw.text((x+65, y+1),text,(101,106,109),font=font) 
+
+    font = ImageFont.truetype(r'OpenSans-Bold.ttf', 22)
+    draw.text((x+75, y-28),StartRow,(59,112,214),font=font) 
+
+    font = ImageFont.truetype(r'OpenSans-Bold.ttf', 22)
+    draw.text((x+75, y+25),BotRow,(59,112,214),font=font) 
 
 def main():
     floors = [['A','E'],['F', 'L'],['M','P'],['Q','Z']]
-    #floors = [['A','E']]
-    BooksPerShelve = 25
-    ShelvesPerRowLow, ShelvesPerRowHigh = 6, 12
+    ShelvesPerRowLow, ShelvesPerRowHigh = 12, 20
     data = {}
 
     for i in range(len(floors)):
         FloorData = {}
-        NumRows = rand.randint(4,8)
-        data[floors[i][0]+floors[i][1]] = floorGen(floors[i][0], floors[i][1], 
-                                                   NumRows, BooksPerShelve, FloorData,
-                                                   ShelvesPerRowLow, ShelvesPerRowHigh)
+        NumRows = rand.randint(5,6)
+        bg = Image.open("bg.png") # 1200, 800
+        FloorImage = bg.convert("RGBA")
+        width, height = 1500, 1000
+        data[floors[i][0]+floors[i][1]] = floorGen(floors[i][0], floors[i][1], NumRows, 
+                                                FloorData,ShelvesPerRowLow, ShelvesPerRowHigh,
+                                                FloorImage, width, height)
+
+        FloorImage.save('floor'+floors[i][0]+floors[i][1]+'.png')
 
     with open('Books.json', 'wt') as out:
         json.dump(data, out, sort_keys=True, indent=4, separators=(',', ': '))
         #json.dump(data, f)
 
+    #DarwFloor(100,100)
 
 if __name__ == "__main__":
     main()
