@@ -1,7 +1,7 @@
 .node {
   width: 25px;
   height: 21px;
-  outline: 1px solid rgba(103, 109, 113, 0.421);
+  outline: 1px solid rgba(103, 109, 113, 0);
   display: inline-block;
 }
 
@@ -27,7 +27,7 @@
 
 
 .node-wall {
-  background-color: rgb(135, 139, 142);
+  background-color: rgba(135, 139, 142, 0);
 }
 
 .node-shortest-path {
