@@ -1,7 +1,7 @@
 .node {
   width: 25px;
   height: 21px;
-  outline: 1px solid rgb(233, 238, 242);
+  outline: 1px solid rgba(103, 109, 113, 0.421);
   display: inline-block;
 }
 
@@ -10,7 +10,7 @@
 }
 
 .node-start {
-  background-color: green;
+  background-color: rgb(123, 227, 98);
 }
 
 .node-visited {

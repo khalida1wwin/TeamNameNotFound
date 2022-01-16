@@ -79,7 +79,7 @@ export default class PathfindingVisualizer extends Component {
     return (
       <>
         <button onClick={() => this.visualizeDijkstra()}>
-          Visualize Dijkstra's Algorithm
+          do the thing
         </button>
         <div className="grid">
           {grid.map((row, rowIdx) => {
@@ -114,26 +114,21 @@ export default class PathfindingVisualizer extends Component {
 
 const getInitialGrid = () => {
   const grid = [];
-  const Wallpoints = ['1,1', '2,2', '3,3'];
+  const Wallpoints = ['1,1', '2,2', '3,3','4,4'];
   for (let row = 0; row < 40; row++) {
     const currentRow = [];
     for (let col = 0; col < 60; col++) {
-      const Vector = [row,col];
-      String(Vector);
-      if (Wallpoints.includes(Vector)) {
+      const test = [row,col];
+      let text = test.toString();
+      if (Wallpoints.includes(text)) {
         
         currentRow.push(createWall(col, row));
         console.log('in if statment########################');
 
-      //}else if ((row === 1) && (col === 3)) {
-        
-      //  currentRow.push(createWall(col, row));
       }else{
         console.log('in if statment########################');
         currentRow.push(createNode(col, row));
       }
-
-      //currentRow.push(createNode(col, row));
 
     }
     grid.push(currentRow);
